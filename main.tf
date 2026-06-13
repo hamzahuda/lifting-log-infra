@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "s3" {
-      bucket = "lifting-log-terraform-state-210948569931-eu-north-1-an"
-      key = "infrastructure/terraform.tfstate"
-      region = "eu-north-1"
+    bucket = "lifting-log-terraform-state-210948569931-eu-north-1-an"
+    key = "infrastructure/terraform.tfstate"
+    region = "eu-north-1"
   }
 }
 
