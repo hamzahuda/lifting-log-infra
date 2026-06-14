@@ -21,8 +21,11 @@ jobs:
                       git checkout main
                       git pull origin main
 
+                      docker builder prune -f
+                      docker image prune -f
+
                       docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --always-recreate-deps
 
                       docker compose exec -T django python manage.py migrate --noinput
 
-                      docker image prune -f
+                      docker system prune -f
