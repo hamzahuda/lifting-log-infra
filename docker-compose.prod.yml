@@ -17,6 +17,7 @@ services:
     volumes:
       - ../../lifting-log-infra/nginx:/etc/nginx/conf.d
       - static_volume:/app/staticfiles
+      - /var/log/nginx:/var/log/nginx
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - django
