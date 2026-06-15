@@ -17,15 +17,20 @@ jobs:
                   key: ${{ secrets.EC2_SSH_KEY }}
                   script: |
                       cd ~/lifting-log/backend
+                      git checkout main
+                      git pull origin main
 
+                      cd ~/lifting-log-infra
                       git checkout main
                       git pull origin main
 
                       docker builder prune -f
                       docker image prune -f
 
-                      docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --always-recreate-deps
+                      docker compose \
+                        -f ../lifting-log/backend/docker-compose.yml \
+                        -f docker-compose.prod.yml \
+                        up -d --build --always-recreate-deps
 
                       docker compose exec -T django python manage.py migrate --noinput
-
                       docker system prune -f
