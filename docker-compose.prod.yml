@@ -1,0 +1,39 @@
+services:
+  db:
+    restart: always
+
+  django:
+    restart: always
+    volumes:
+      - static_volume:/app/staticfiles
+
+  nginx:
+    image: nginx:alpine
+    container_name: lifting_log_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - static_volume:/app/staticfiles
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - django
+      - grafana
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  static_volume:
+  prometheus_data:
+  grafana_data:
