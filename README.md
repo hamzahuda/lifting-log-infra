@@ -5,7 +5,7 @@ Production cloud infrastructure configuration for [lifting-log](https://github.c
 <p align="center">
   <img src="readme-files/Grafana%20Dashboard.gif" width="600" alt="Grafana Dashboard 10x Speed">
   <br>
-  <sub>Real-time workout metrics visualized on the Grafana dashboard (10x speed)</sub>
+  <sub>Real-time server metrics visualized on the Grafana dashboard (10x speed)</sub>
 </p>
 
 ## Stack
