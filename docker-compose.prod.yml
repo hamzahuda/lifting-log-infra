@@ -1,11 +1,30 @@
 services:
   db:
+    image: mysql:8.0
+    container_name: lifting_log_db
+    env_file:
+      - .env
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"
+      interval: 5s
+      timeout: 5s
+      retries: 55
+      start_period: 5s
     restart: always
 
   django:
-    restart: always
+    container_name: lifting_log_django
+    image: hamzahuda/lifting-log-backend:latest
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - static_volume:/app/staticfiles
+    restart: always
 
   nginx:
     image: nginx:alpine
@@ -15,7 +34,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ../../lifting-log-infra/nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d
       - static_volume:/app/staticfiles
       - /var/log/nginx:/var/log/nginx
       - /etc/letsencrypt:/etc/letsencrypt:ro
@@ -26,7 +45,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     volumes:
-      - ../../lifting-log-infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
 
   grafana:
@@ -35,6 +54,7 @@ services:
       - grafana_data:/var/lib/grafana
 
 volumes:
+  mysql_data:
   static_volume:
   prometheus_data:
   grafana_data:
