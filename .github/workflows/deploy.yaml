@@ -25,7 +25,7 @@ jobs:
 
                       docker compose -f docker-compose.prod.yml pull
 
-                      docker compose -f docker-compose.prod.yml up -d --always-recreate
+                      docker compose -f docker-compose.prod.yml up -d --always-recreate-deps
 
                       docker compose exec -f docker-compose.prod.yml -T django python manage.py migrate --noinput
 
